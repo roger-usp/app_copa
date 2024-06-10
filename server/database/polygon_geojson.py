@@ -40,7 +40,7 @@ def create_other_entry(row, other_cols):
     return row
 
 
-def make_geojson(info_file_name):
+def make_poly_geojson(info_file_name):
     info_dict = get_info_dict(info_file_name)
     data_df = get_data_df(info_dict)
     geojson_gdf = get_geojson_gdf(info_dict)
