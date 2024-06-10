@@ -3,7 +3,7 @@ import pandas as pd
 
 def get_info_dict(info_file_name):
     file_path = f"points/info/{info_file_name}"
-	with open(file_path, 'r') as file:
+    with open(file_path, 'r') as file:
         info_dict = json.load(file)
     return info_dict
 
@@ -18,8 +18,11 @@ def create_other_entry(row, other_cols):
     # col = column
     other_html = ""
     for col in other_cols:
-        other_html += f"<p>{col}: {row[col]}</p>"
+        other_html += f"<p>{col}: {row[col]}</p><br>"
     
+    if other_html.endswith("<br>"):
+        other_html = other_html[:-4]
+        
     row["other"] = other_html
     return row
 
@@ -53,7 +56,7 @@ def fill_point_features(info_file_name):
     data_df = get_data_df(info_dict)
 
     mandatory_cols = ["lat", "lon"]
-    other_cols = [col for col in df.columns if col not in mandatory_cols]
+    other_cols = [col for col in data_df.columns if col not in mandatory_cols]
     data_df = data_df.apply(lambda row: create_other_entry(row, other_cols), axis=1)
     
     color = info_dict["color"]
@@ -78,3 +81,4 @@ def make_point_geojson(info_file_name_list):
         geojson["features"] += point_features
 
     return geojson
+
