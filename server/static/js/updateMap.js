@@ -3,11 +3,15 @@ function resetMapContainer(mapContainerID) {
     // Creates 3 div's inside: map, hover-info and colorbar-div
     let mapDiv = document.createElement("div");
     mapDiv.id = "map";
-    mapDiv.style = "height: 75%;";
+    mapDiv.style = "height: 70%;";
 
     let hoverInfo = document.createElement("div");
     hoverInfo.id = "hover-info";
     hoverInfo.style = "height: 5%; display: flex;";
+
+    let pointArrowLegend = document.createElement("div");
+    pointArrowLegend.id = "point-arrow-legend";
+    pointArrowLegend.style = "height: 5%; display: flex;";
 
     let colorbarDiv = document.createElement("div");
     colorbarDiv.id = "colorbar-div";
@@ -18,6 +22,7 @@ function resetMapContainer(mapContainerID) {
     mapContainer.innerHTML = "";  // clear previous map
     mapContainer.appendChild(mapDiv);
     mapContainer.appendChild(hoverInfo);
+    mapContainer.appendChild(pointArrowLegend);
     mapContainer.appendChild(colorbarDiv);
 }
 
@@ -94,7 +99,72 @@ function onEachFeature(feature, layer) {
 }
 
 
-// Falta criar a legenda das setas e pontos
+function getUniqueColorLegendArray(geojson) {
+// the features of the geojson must have "color" and "legend" as properties
+    uniqueColorLegendArray = [];
+    var unique = true;
+
+    for (let i=0; i<geojson.features.length;i++) {
+        let feature = geojson.features[i];
+        unique = true;
+
+        for (let j=0; j<uniqueColorLegendArray.length;j++) {
+            let colorLegendObj = uniqueColorLegendArray[j];
+
+            let equalColors = colorLegendObj["color"] === feature.properties.color;
+            let equalLegends = colorLegendObj["legend"] === feature.properties.legend;
+            
+            if (equalColors && equalLegends) {
+                unique = false;
+                break;
+            }
+        }
+
+        if (unique === true) {
+            uniqueColorLegendArray.push({
+                "color": feature.properties.color, 
+                "legend": feature.properties.legend
+            });
+        }
+    }
+
+    return uniqueColorLegendArray;
+
+}
+
+
+function fillLegend(characterStr, pointArrowLegend, charLegendArray) {
+    for (let i=0;i<charLegendArray.length;i++) {
+        let entryContainer = document.createElement("div");
+        entryContainer.style = "display: flex;"
+
+        let character = document.createElement("p");
+        character.innerHTML = characterStr;
+        character.style.color = charLegendArray[i].color;
+
+        let legend = document.createElement("p");
+        legend.innerHTML = charLegendArray[i].legend;
+
+        entryContainer.appendChild(character);
+        entryContainer.appendChild(legend);
+
+        pointArrowLegend.appendChild(entryContainer);
+    }
+}
+
+
+function fillPointArrowLegend(lineGeojson, pointGeojson) {
+    let pointArrowLegend = document.getElementById("point-arrow-legend");  // declared in resetMapContainer
+    let arrowLegendArray =  getUniqueColorLegendArray(lineGeojson);  // considering there are just arrows, no Lines
+    let pointArray = getUniqueColorLegendArray(pointGeojson);
+
+    let arrowCharacter = "&uarr;";
+    let pointCharacter = "&#9679;"
+    fillLegend(arrowCharacter, pointArrowLegend, arrowLegendArray);
+    fillLegend(pointCharacter, pointArrowLegend, pointArray);
+}
+
+// Falta fazer os pontos não apareceram como marker
 function updateMap(
     mapContainerID,
     colorbarTitle, 
@@ -112,6 +182,7 @@ function updateMap(
     L.geoJson(lineGeojson, {style: stylePointLine}).addTo(map);
     L.geoJson(pointGeojson, {style: stylePointLine}).addTo(map);
 
+    fillPointArrowLegend(lineGeojson, pointGeojson);
     makeColorbar("colorbar-div", colorbarTitle, 11, cmap);
 }
 
