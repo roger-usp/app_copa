@@ -2,6 +2,7 @@ from sympy import solve, Eq, Symbol
 import numpy as np 
 import json
 import pandas as pd
+import os
 
 def get_data_types(nested_list):
     return [[type(element).__name__ for element in sublist] for sublist in nested_list]
@@ -40,14 +41,16 @@ def get_arrow_points(A,B, theta=0.1):
     return arrow_points
 
 def get_info_dict(info_file_name):
-    file_path = f"arrows/info/{info_file_name}"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(script_dir, 'arrows', 'info', info_file_name)
     with open(file_path, 'r') as file:
         info_dict = json.load(file)
     return info_dict
 
 
 def get_data_df(info_dict):
-    data_path = f"arrows/data/{info_dict['data_path']}"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    data_path = os.path.join(script_dir, 'arrows', 'data', info_dict['data_path'])
     data_df = pd.read_csv(data_path)
     return data_df
 

@@ -55,11 +55,25 @@ function stylePolygonFeature(feature) {
 
 
 
-function stylePointLine(feature) {
+function styleLine(feature) {
     return {color: feature.properties.color};
 }
 
 
+function pointToLayer(feature, latlng) {
+    return L.circleMarker(latlng, {
+        radius: 5,
+        color: feature.properties.color,
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+    });
+}
+
+
+function pointOnEachFeature(feature, layer) {
+    layer.bindPopup(feature.properties.other);
+}
 
 function showInfo(e) {
     let layer = e.target;
@@ -71,7 +85,7 @@ function showInfo(e) {
     let valueUnit = properties.valueUnit;
     let otherInfo = properties.other; // this is a string in HTML format
 
-    let infoHTML = `<p>${valueTitle}:${value} ${valueUnit}</p>` + otherInfo
+    let infoHTML = `<p>${valueTitle}: ${value} ${valueUnit}</p>` + "&emsp;" + otherInfo
 
     let infoDivID = "hover-info"; // declared in resetMapContainer
     let infoDiv = document.getElementById(infoDivID);
@@ -91,7 +105,7 @@ function hideInfo(e){
 
 
 
-function onEachFeature(feature, layer) {
+function polygonOnEachFeature(feature, layer) {
     layer.on({
         mouseover: showInfo,
         mouseout: hideInfo,
@@ -143,7 +157,7 @@ function fillLegend(characterStr, pointArrowLegend, charLegendArray) {
         character.style.color = charLegendArray[i].color;
 
         let legend = document.createElement("p");
-        legend.innerHTML = charLegendArray[i].legend;
+        legend.innerHTML = charLegendArray[i].legend + "&emsp;";  // &emsp; = tab
 
         entryContainer.appendChild(character);
         entryContainer.appendChild(legend);
@@ -178,9 +192,9 @@ function updateMap(
     resetMapContainer(mapContainerID);
 
     let map = initMap("map", centerCoords, zoomLevel);
-    L.geoJson(polygonGeojson, {style: stylePolygonFeature, onEachFeature: onEachFeature}).addTo(map);
-    L.geoJson(lineGeojson, {style: stylePointLine}).addTo(map);
-    L.geoJson(pointGeojson, {style: stylePointLine}).addTo(map);
+    L.geoJson(polygonGeojson, {style: stylePolygonFeature, onEachFeature: polygonOnEachFeature}).addTo(map);
+    L.geoJson(lineGeojson, {style: styleLine}).addTo(map);
+    L.geoJson(pointGeojson, {pointToLayer: pointToLayer, onEachFeature: pointOnEachFeature}).addTo(map);
 
     fillPointArrowLegend(lineGeojson, pointGeojson);
     makeColorbar("colorbar-div", colorbarTitle, 11, cmap);

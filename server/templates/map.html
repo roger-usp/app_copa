@@ -9,30 +9,42 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    <!--My code-->
-    <script src="{{url_for('static', filename='js/updateMap.js')}}"></script>
-    <script src="{{url_for('static', filename='js/fillSelect.js')}}"></script>
-
     <!--Multi select-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/css/multi-select-tag.css">
     <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.0.1/dist/js/multi-select-tag.js"></script>
+
+    <!--ColorBar-->
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/colorbar_style.css') }}">
+    <script src="{{url_for('static', filename='js/colormap.js')}}"></script>
+    <script src="{{url_for('static', filename='js/colorbar.js')}}"></script>
+    
+    <!--My code-->
+    <script src="{{url_for('static', filename='js/updateMap.js')}}"></script>
+    <script src="{{url_for('static', filename='js/fillSelect.js')}}"></script>
+    <script src="{{url_for('static', filename='js/polygonAddColor.js')}}"></script>
+
 
 </head>
 <body>
     <div id="navbar"></div>
 
-    <div>
+    <div style="display: flex; justify-content: space-around;">
         <div style="width: 20vw;">
+            <label for="base-select">Mapa base:</label>
             <select name="base-select" id="base-select"></select>
         </div>
 
         <div style="width: 20vw;">
+            <label for="point-select">Pontos:</label>
             <select name="point-select" id="point-select" multiple></select>
         </div>
 
         <div style="width: 20vw;">
+            <label for="arrow-select">Setas:</label>
             <select name="arrow-select" id="arrow-select" multiple></select>
         </div>
+
+        <button onclick="updateBtnClick()">Atualizar Mapa</button>
     </div>
 
     <div id="map-container"></div>
@@ -46,6 +58,44 @@
 
         let arrowKeeper = new ValueKeeper();
         fillArrowSelect(scriptRoot, arrowKeeper);
+
+        async function fetchGeojson(scriptRoot, route, valueArray) {
+            var url = scriptRoot + route + "?";
+            valueArray.forEach(value => url = url + "value=" + value.toString() + "&")
+            let geojson = await fetch(url);
+            geojson = await geojson.json();
+            return geojson
+        }
+
+        async function updateBtnClick() {
+            let baseSelect = document.getElementById("base-select");
+
+            let polygonValue = baseSelect.value;
+            let pointValues = pointKeeper.values;
+            let arrowValues = arrowKeeper.values;
+
+            var polygonGeojson = await fetchGeojson(scriptRoot, "/polygon-geojson", [polygonValue]);
+            let pointGeojson = await fetchGeojson(scriptRoot, "/point-geojson", pointValues);
+            let arrowGeojson = await fetchGeojson(scriptRoot, "/arrow-geojson", arrowValues);
+
+            let colorbarTitle = `${polygonGeojson.features[0].properties.valueTitle} (${polygonGeojson.features[0].properties.valueUnit})`
+
+            let cmap = getGeojsonCmap(polygonGeojson, ["#fcc2c2", "#850000"], "hex");
+            polygonGeojson = fillGeojsonColor(polygonGeojson, cmap);
+            console.log(polygonGeojson);
+            let center = [polygonGeojson.metadata.center_lat, polygonGeojson.metadata.center_lon];
+            let zoomLevel = polygonGeojson.metadata.zoom_level;
+            updateMap(
+                "map-container",
+                colorbarTitle, 
+                cmap, 
+                polygonGeojson, 
+                arrowGeojson, 
+                pointGeojson, 
+                center, 
+                zoomLevel
+            )
+        }
     </script>
 </body>
 </html>

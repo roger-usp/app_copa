@@ -31,8 +31,34 @@ def list_files(directory):
     return valid_files
 
 
+def get_info_list(directory):
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    directory = directory[:-1] if directory[-1] == "/" else directory
+    directory = os.path.join(script_dir, *directory.split("/"))
+
+    valid_files = list_files(directory)
+    info_list = []
+    for filename in valid_files:
+        info_element = {}
+        with open(f"{directory}/{filename}", "r") as f:
+            file_content = json.load(f)
+
+        option_value = filename[:-5]  # removes .json from the end
+        info_element["optionValue"] = option_value
+
+        if "legend" in file_content.keys():
+            info_element["optionInnerHTML"] = file_content["legend"]
+
+        elif "value_title" in file_content.keys():
+            info_element["optionInnerHTML"] = file_content["value_title"]
+
+        if "optgroup" in file_content.keys():
+            optgroup = file_content["optgroup"]
+            info_element["optgroupLabel"] = optgroup
+        
+        info_list.append(info_element)
+    
+    return info_list
 
 
-
-
-
+        

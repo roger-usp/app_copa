@@ -1,0 +1,31 @@
+.colorbar_container000 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.colorbar000 {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    width: 100%;
+    height: 40%;
+}
+
+.color_entry000 {
+    height: 100%;
+}
+
+.legend000 {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    width: 100%;
+    height: 40%;
+}
+
+.legend_entry000 {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+}

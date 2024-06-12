@@ -2,29 +2,34 @@ import json
 import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
+import os
 
 def get_info_dict(info_file_name):
-    file_path = f"polygons/info/{info_file_name}"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(script_dir, 'polygons', 'info', info_file_name)
     with open(file_path, 'r') as file:
         info_dict = json.load(file)
     return info_dict
 
 
 def get_data_df(info_dict):
-    data_path = f"polygons/data/{info_dict['data_path']}"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    data_path = os.path.join(script_dir, 'polygons', 'data', info_dict['data_path'])
     data_df = pd.read_csv(data_path)
     return data_df
 
 
 def get_geojson_gdf(info_dict):
-    geojson_path = f"polygons/geojson/{info_dict['region_geojson']}"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    geojson_path = os.path.join(script_dir, 'polygons', 'geojson', info_dict['region_geojson'])
     geojson_gdf = gpd.read_file(geojson_path)
     return geojson_gdf
 
 
 def get_metadata(info_dict):
     # should be: {"center_lat": lat, "center_lon": lon, "zoom_level": zoom...}
-    geojson_path = f"polygons/geojson/{info_dict['region_geojson']}"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    geojson_path = os.path.join(script_dir, 'polygons', 'geojson', info_dict['region_geojson'])
     with open(geojson_path, 'r') as file:
         metadata = json.load(file)["metadata"]
     return metadata
@@ -34,7 +39,7 @@ def create_other_entry(row, other_cols):
     # col = column
     other_html = ""
     for col in other_cols:
-        other_html += f"<p>{col}: {row[col]}</p>"
+        other_html += f"<p>{col}: {row[col]}&emsp;</p>" # &emsp; = tab
     
     row["other"] = other_html
     return row
@@ -59,5 +64,6 @@ def make_poly_geojson(info_file_name):
     geojson = gdf.to_json()
     geojson = json.loads(geojson)
     geojson["metadata"] = metadata
+    print(metadata)
     return geojson
 
