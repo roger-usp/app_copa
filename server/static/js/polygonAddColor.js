@@ -23,6 +23,6 @@ function fillGeojsonColor(geojson, cmap) {
             newGeojson.features.push(newFeature)
         }
     );
-
+    newGeojson["metadata"] = geojson["metadata"]
     return newGeojson;
 }

@@ -28,7 +28,7 @@
 <body>
     <div id="navbar"></div>
 
-    <div style="display: flex; justify-content: space-around;">
+    <div style="display: flex; justify-content: space-around; height: 10vh;">
         <div style="width: 20vw;">
             <label for="base-select">Mapa base:</label>
             <select name="base-select" id="base-select"></select>
@@ -47,7 +47,7 @@
         <button onclick="updateBtnClick()">Atualizar Mapa</button>
     </div>
 
-    <div id="map-container"></div>
+    <div id="map-container" style="height: 80vh;"></div>
     <script>
         let scriptRoot = {{ request.script_root|tojson }};
         
@@ -75,14 +75,25 @@
             let arrowValues = arrowKeeper.values;
 
             var polygonGeojson = await fetchGeojson(scriptRoot, "/polygon-geojson", [polygonValue]);
-            let pointGeojson = await fetchGeojson(scriptRoot, "/point-geojson", pointValues);
-            let arrowGeojson = await fetchGeojson(scriptRoot, "/arrow-geojson", arrowValues);
+            console.log(arrowValues.length)
+            if ( pointValues.length > 0) {
+    
+                let pointGeojson = await fetchGeojson(scriptRoot, "/point-geojson", pointValues);
+            } else if (pointValues.length === 0){
+                let pointGeojson = {"type": "FeatureCollection", "features": []};
+            }
+            
+            if (arrowValues.length > 0) {
+                let arrowGeojson = await fetchGeojson(scriptRoot, "/arrow-geojson", arrowValues);
+            } else if (arrowValues.length === 0){
+                let arrowGeojson = {"type": "FeatureCollection", "features": []};
+            }
+        
 
             let colorbarTitle = `${polygonGeojson.features[0].properties.valueTitle} (${polygonGeojson.features[0].properties.valueUnit})`
 
             let cmap = getGeojsonCmap(polygonGeojson, ["#fcc2c2", "#850000"], "hex");
             polygonGeojson = fillGeojsonColor(polygonGeojson, cmap);
-            console.log(polygonGeojson);
             let center = [polygonGeojson.metadata.center_lat, polygonGeojson.metadata.center_lon];
             let zoomLevel = polygonGeojson.metadata.zoom_level;
             updateMap(

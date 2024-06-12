@@ -64,6 +64,5 @@ def make_poly_geojson(info_file_name):
     geojson = gdf.to_json()
     geojson = json.loads(geojson)
     geojson["metadata"] = metadata
-    print(metadata)
     return geojson
 
