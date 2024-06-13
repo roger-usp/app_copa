@@ -1,8 +1,8 @@
 from flask import Flask, render_template, jsonify, request
-from .database.list_json import *
-from .database.polygon_geojson import make_poly_geojson
-from .database.arrow_geojson import make_arrow_geojson
-from .database.point_geojson import make_point_geojson
+from database.list_json import *
+from database.polygon_geojson import make_poly_geojson
+from database.arrow_geojson import make_arrow_geojson
+from database.point_geojson import make_point_geojson
 
 app = Flask(__name__)
 
@@ -49,3 +49,4 @@ def point_geojson():
     point_geojson = make_point_geojson(info_file_name_list)
     return jsonify(point_geojson)
 
+app.run(debug=True)

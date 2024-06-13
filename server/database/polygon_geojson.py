@@ -1,7 +1,6 @@
 import json
 import pandas as pd
 import geopandas as gpd
-import matplotlib.pyplot as plt
 import os
 
 def get_info_dict(info_file_name):
