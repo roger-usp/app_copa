@@ -45,7 +45,7 @@ function initMap(mapDivID, centerCoords, zoomLevel) {
 function stylePolygonFeature(feature) {
     return {
         fillColor: feature.properties.color,
-        weight: 2,
+        weight: 1,
         opacity: 1,
         color: "#444444",
         dashArray: '3',
@@ -97,7 +97,7 @@ function showInfo(e) {
 
 function hideInfo(e){
     let layer = e.target;
-    layer.setStyle({dashArray: '3', color: "#444444", weight: 2})
+    layer.setStyle({dashArray: '3', color: "#444444", weight: 1})
     let infoDivID = "hover-info"; // declared in resetMapContainer
     let infoDiv = document.getElementById(infoDivID);
     infoDiv.innerHTML = "<p></p>";

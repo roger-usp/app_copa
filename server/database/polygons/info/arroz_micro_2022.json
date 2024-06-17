@@ -1,0 +1,7 @@
+{
+    "region_geojson": "microrregioesBR.geojson",
+    "data_path": "arroz_micro_2022.csv",
+    "value_title": "Produção de Arroz",
+    "value_unit": "ton/ano",
+    "optgroup": "Culturas"
+}

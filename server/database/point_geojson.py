@@ -5,7 +5,7 @@ import os
 def get_info_dict(info_file_name):
     script_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(script_dir, 'points', 'info', info_file_name)
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', encoding="utf-8") as file:
         info_dict = json.load(file)
     return info_dict
 

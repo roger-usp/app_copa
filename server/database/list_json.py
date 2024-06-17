@@ -3,7 +3,7 @@ import json
 
 def is_valid_json(file_path):
     try:
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r', encoding="utf-8") as file:
             json.load(file)
         return True
     except (ValueError, json.JSONDecodeError) as error:
@@ -40,7 +40,7 @@ def get_info_list(directory):
     info_list = []
     for filename in valid_files:
         info_element = {}
-        with open(f"{directory}/{filename}", "r") as f:
+        with open(f"{directory}/{filename}", "r", encoding="utf-8") as f:
             file_content = json.load(f)
 
         option_value = filename[:-5]  # removes .json from the end
