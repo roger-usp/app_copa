@@ -27,7 +27,6 @@ function fillSelectbox(selectID, info) {
         let optgroupLabel = uniqueOptGroups[i];
 
         let optGroup = document.createElement("optgroup");
-        optGroup.label = optgroupLabel;
 
         for (let j=0; j<info.length;j++) {
             let infoEntry = info[j];
@@ -38,6 +37,7 @@ function fillSelectbox(selectID, info) {
                 optGroup.appendChild(opt);
             }
         }
+        optGroup.label = optgroupLabel.toString() + "  ";
         selectbox.appendChild(optGroup);
     }
 }

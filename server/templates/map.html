@@ -32,7 +32,7 @@
     <div id="buttons" style="width: 20%;">
         <div style="width: 95%;">
             <label for="base-select">Mapa base:</label>
-            <select name="base-select" id="base-select"></select>
+            <select style="width: 95%;" name="base-select" id="base-select"></select>
         </div>
 
         <div style="width: 20vw;">
@@ -46,6 +46,9 @@
         </div>
 
         <button onclick="updateBtnClick()">Atualizar Mapa</button>
+        <br>
+        <img src="{{url_for('static', filename='images/logo_fapesp.png')}}" style="height: 10%; margin:10px"/>
+        <p>Processo 2023/05420-0</p>
     </div>
 
     <div id="map-container" style="height: 80vh; width: 70%;"></div>
