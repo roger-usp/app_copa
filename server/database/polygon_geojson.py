@@ -29,7 +29,7 @@ def get_metadata(info_dict):
     # should be: {"center_lat": lat, "center_lon": lon, "zoom_level": zoom...}
     script_dir = os.path.dirname(os.path.abspath(__file__))
     geojson_path = os.path.join(script_dir, 'polygons', 'geojson', info_dict['region_geojson'])
-    with open(geojson_path, 'r') as file:
+    with open(geojson_path, 'r', encoding="utf-8") as file:
         metadata = json.load(file)["metadata"]
     return metadata
 

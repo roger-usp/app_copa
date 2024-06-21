@@ -1,0 +1,7 @@
+{
+    "region_geojson": "municipiosBR.geojson",
+    "data_path": "residuos_laranja.csv",
+    "value_title": "Resíduos de Suco de Laranja",
+    "value_unit": "ton/ano",
+    "optgroup": "Resíduos"
+}
