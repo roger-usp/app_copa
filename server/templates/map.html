@@ -23,15 +23,17 @@
     <script src="{{url_for('static', filename='js/fillSelect.js')}}"></script>
     <script src="{{url_for('static', filename='js/polygonAddColor.js')}}"></script>
 
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/general_style.css') }}">
+
 
 </head>
 <body>
     <div id="navbar"></div>
 
 <div style="display: flex; height: 90vh; width: 95vw; justify-content: space-between;">
-    <div id="buttons" style="width: 20%;">
-        <div style="width: 95%;">
-            <label for="base-select">Mapa base:</label>
+    <div id="buttons" style="width: 25%; height: 100vh;">
+        <div id="base-select-container" style="width: 95%;">
+            <label for="base-select" id="base-select-label">Matéria-Prima:</label>
             <select style="width: 95%;" name="base-select" id="base-select"></select>
         </div>
 
@@ -45,7 +47,7 @@
             <select name="arrow-select" id="arrow-select" multiple></select>
         </div>
 
-        <button onclick="updateBtnClick()">Atualizar Mapa</button>
+        <button id="update-map-btn" onclick="updateBtnClick()">Atualizar Mapa</button>
         <br>
         <img src="{{url_for('static', filename='images/logo_fapesp.png')}}" style="height: 10%; margin:10px"/>
         <p>Processo 2023/05420-0</p>
@@ -100,7 +102,7 @@
 
             let colorbarTitle = `${polygonGeojson.features[0].properties.valueTitle} (${polygonGeojson.features[0].properties.valueUnit})`
 
-            let cmap = getGeojsonCmap(polygonGeojson, ["#fcc2c2", "#850000"], "hex");
+            let cmap = getGeojsonCmap(polygonGeojson, ["#e8f1ff", "#05015c"], "hex");
             polygonGeojson = fillGeojsonColor(polygonGeojson, cmap);
             let center = [polygonGeojson.metadata.center_lat, polygonGeojson.metadata.center_lon];
             let zoomLevel = polygonGeojson.metadata.zoom_level;
