@@ -3,24 +3,30 @@ import numpy as np
 import json
 import pandas as pd
 import os
+import math
 
 def get_data_types(nested_list):
     return [[type(element).__name__ for element in sublist] for sublist in nested_list]
 
 
+def get_ux(ABx, ABy, theta):
+    AB_module = math.sqrt(ABx**2 + ABy**2)
+    ux0 = ((theta/2) * AB_module) / math.sqrt(1 + (-ABx / ABy)**2)
+    ux1 = -ux0
+    return [ux0, ux1]
+
 def get_u(ABx, ABy, theta):
-    AB_module = (ABx**2 + ABy**2)**0.5
-    ux = Symbol("ux")
-    uy = Symbol("uy")
-    eq1 = Eq(uy + (ABx/ABy)*ux, 0)
-    eq2 = Eq((ux**2 + uy**2)**0.5, theta*AB_module/2)
+    ux = get_ux(ABx, ABy, theta)
+    u0 = [
+        ux[0],
+        (-ABx / ABy) * ux[0]
+    ]
 
-    sol = solve([eq1, eq2], [ux,uy])
-    convert_float = lambda u: [float(el) for el in u]
-    u0, u1 = sol
-    u0, u1 = convert_float(u0), convert_float(u1)
-    return u0, u1
-
+    u1 = [
+        ux[1],
+        (-ABx / ABy) * ux[1]
+    ]
+    return u0,u1
 
 
 def get_arrow_points(A,B, theta=0.1):
