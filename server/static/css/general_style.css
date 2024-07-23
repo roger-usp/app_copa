@@ -1,0 +1,42 @@
+#buttons {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-right: 1px solid #ccc;
+    margin: 0px;
+}
+
+#base-select-label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+#base-select {
+    margin-bottom: 20px;
+}
+
+#update-map-btn {
+    background-color: #05376c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+#update-map-btn:hover {
+    background-color: #031d3a;
+}
+
+#map-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+}
+
+#map {
+    border-radius: 4px;
+}
