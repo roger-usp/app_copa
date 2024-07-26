@@ -46,4 +46,8 @@ def point_geojson():
     point_geojson = db.make_point_geojson(info_file_name_list)
     return jsonify(point_geojson)
 
+@app.route("/data-sources")
+def data_sources():
+    return render_template("data_sources.html")
+
 app.run(debug=True)
