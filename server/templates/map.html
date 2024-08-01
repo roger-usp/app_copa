@@ -80,6 +80,7 @@
         }
 
         async function updateBtnClick() {
+            document.body.style.cursor = 'wait';
             let baseSelect = document.getElementById("base-select");
 
             let polygonValue = baseSelect.value;
@@ -120,6 +121,7 @@
                 center, 
                 zoomLevel
             )
+            document.body.style.cursor = 'default';
         }
     </script>
 </body>
