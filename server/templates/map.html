@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAPESP EPAGRO</title>
-    <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='images/favicon.ico')}}">
+    <title>Copa Energia</title>
+    <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='images/copa_ico.ico')}}">
 
     <!--Leaflet-->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
@@ -53,8 +53,7 @@
 
         <button id="update-map-btn" onclick="updateBtnClick()">Atualizar Mapa</button>
         <br>
-        <img src="{{url_for('static', filename='images/logo_fapesp.png')}}" style="height: 10%; margin:10px"/>
-        <p style="color: #05015c">Processo 2023/05420-0</p>
+        <img src="{{url_for('static', filename='images/logo_copa.png')}}" style="height: 10%; margin:10px"/>
     </div>
 
     <div id="map-container" style="height: 85vh; width: 70%;"></div>
@@ -107,7 +106,7 @@
 
             let colorbarTitle = `${polygonGeojson.features[0].properties.valueTitle} (${polygonGeojson.features[0].properties.valueUnit})`
 
-            let cmap = getGeojsonCmap(polygonGeojson, ["#e8f1ff", "#05015c"], "hex");
+            let cmap = getGeojsonCmap(polygonGeojson, ["#ffedd8", "#ff7f50", "#b22222"], "hex");
             polygonGeojson = fillGeojsonColor(polygonGeojson, cmap);
             let center = [polygonGeojson.metadata.center_lat, polygonGeojson.metadata.center_lon];
             let zoomLevel = polygonGeojson.metadata.zoom_level;
