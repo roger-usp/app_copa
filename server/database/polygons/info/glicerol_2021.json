@@ -1,0 +1,7 @@
+{
+    "region_geojson": "municipiosBR.geojson",
+    "data_path": "glicerol_2021.csv",
+    "value_title": "Produção de Glicerol",
+    "value_unit": "ton/ano",
+    "optgroup": "Outros"
+}
