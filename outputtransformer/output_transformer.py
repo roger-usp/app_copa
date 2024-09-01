@@ -52,8 +52,9 @@ def add_point_coords(points_df_row, mun_coords_df):
 
 def get_colorless_points(output_df):
     mun_coords_df = get_mun_coords_df()
-    prod_units = output_df.loc[output_df["INSTALAR_P_Z"] == 1]
-    storage_units = output_df.loc[output_df["INSTALAR_S"] == 1]
+
+    prod_units = output_df[(output_df["INSTALAR_P_Z"] > 0.99) & (output_df["INSTALAR_P_Z"] < 1.01)]
+    storage_units = output_df[(output_df["INSTALAR_S"] > 0.99) & (output_df["INSTALAR_S"] < 1.01)]
 
     points_df = get_initial_points_df(storage_units, prod_units)
     points_df = points_df.apply(lambda row: add_point_coords(row, mun_coords_df), axis=1)
