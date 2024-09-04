@@ -8,7 +8,7 @@ def normalize_mun_names(text):
     # Filter out the diacritical marks (combining characters)
     normalized_text = ''.join(char for char in normalized_text if unicodedata.category(char) != 'Mn')
     normalized_text = normalized_text.lower()
-    normalized_text = normalized_text.replace(" ", "")
+    normalized_text = ''.join([char for char in normalized_text if char.isalpha()])
     return normalized_text
 
 
