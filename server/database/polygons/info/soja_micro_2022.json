@@ -1,7 +1,7 @@
 {
     "region_geojson": "microrregioesBR.geojson",
     "data_path": "soja_micro_2022.csv",
-    "value_title": "Produção de Soja",
+    "value_title": "Produção de Soja (2022)",
     "value_unit": "ton/ano",
     "optgroup": "Culturas"
 }
