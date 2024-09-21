@@ -22,20 +22,67 @@ def get_mun_coords_df():
 
 
 def get_initial_points_df(storage_units, prod_units):
-    points_df = {"municipio": [], "legend": [], "file_name": []}
+    points_df = {"municipio": [], "Período Instalação":[], "legend": [], "file_name": []}
     for idx, row in storage_units.iterrows():
         first_column_value  = eval(row.tolist()[0])
+        try:
+            ano_instalacao = first_column_value[1]
+        except IndexError:
+            ano_instalacao = 1
+
         points_df["municipio"].append(first_column_value[0])
         points_df["legend"].append("Unidade de Armazenamento")
         points_df["file_name"].append("S_units")
+        points_df["Período Instalação"].append(ano_instalacao)
+
     
     for idx, row in prod_units.iterrows():
         first_column_value  = eval(row.tolist()[0])
+        try:
+            ano_instalacao = first_column_value[2]
+        except IndexError:
+            ano_instalacao = 1
+
         points_df["municipio"].append(first_column_value[0])
         points_df["legend"].append(f"Unidade de Produção ({first_column_value[1]})")
         points_df["file_name"].append(f"P_units_{first_column_value[1]}")
+        points_df["Período Instalação"].append(ano_instalacao)
     
-    return pd.DataFrame(points_df).drop_duplicates()
+    points_df = pd.DataFrame(points_df)
+    points_df = points_df.groupby(by="municipio").min()
+    points_df = points_df.reset_index()
+    return points_df
+
+
+
+def add_capacities(points_df_row, output_df):
+    mun_name = points_df_row["municipio"]
+    is_storage_unit = points_df_row["legend"] == "Unidade de Armazenamento"
+    
+    if is_storage_unit:
+        capac_col_name = "ESTOQUE_CAPAC"
+        product_idx = 1
+    else: # is_prod_unit
+        capac_col_name = "MPZ_CAPAC"
+        product_idx = 2
+
+    capac_df = output_df.loc[output_df[capac_col_name]>0]
+    points_df_row["Capacidade"] = ""
+
+    for idx, row in capac_df.iterrows():
+        first_column_value  = eval(row.tolist()[0])
+
+        if first_column_value[0] == mun_name:
+            capac = row[capac_col_name]
+            capac_str = "{:.2f}".format(capac)
+            capac_str = f"{capac_str} ton {first_column_value[product_idx]}/ano"
+            points_df_row["Capacidade"] = capac_str
+            break
+    
+    return points_df_row
+
+
+
 
 
 
@@ -58,6 +105,7 @@ def get_colorless_points(output_df):
 
     points_df = get_initial_points_df(storage_units, prod_units)
     points_df = points_df.apply(lambda row: add_point_coords(row, mun_coords_df), axis=1)
+    points_df = points_df.apply(lambda row: add_capacities(row, output_df), axis=1)
 
     colorless_points = {}
     for file_name in points_df["file_name"].unique():
@@ -67,7 +115,7 @@ def get_colorless_points(output_df):
             "legend": data["legend"][0],
             "color": ""
         }
-        data = data[["lon", "lat"]]
+        data = data[["lon", "lat", "Período Instalação", "Capacidade"]]
         colorless_points[file_name] = [data, info]
 
     return colorless_points
