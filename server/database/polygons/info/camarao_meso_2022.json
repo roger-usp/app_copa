@@ -1,7 +1,0 @@
-{
-    "region_geojson": "mesorregioesBR.geojson",
-    "data_path": "camarao_meso_2022.csv",
-    "value_title": "Produção de Camarão",
-    "value_unit": "ton/ano",
-    "optgroup": "Criação"
-}

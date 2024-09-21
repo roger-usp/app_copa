@@ -1,7 +1,0 @@
-{
-    "region_geojson": "microrregioesBR.geojson",
-    "data_path": "laranja_micro_2022.csv",
-    "value_title": "Produção de Laranja",
-    "value_unit": "ton/ano",
-    "optgroup": "Culturas"
-}

@@ -1,7 +1,0 @@
-{
-    "region_geojson": "uk_regions.geojson",
-    "data_path": "uk_food_waste_biogas.csv",
-    "value_title": "Food Waste Potential for Biogas",
-    "value_unit": "GWh/year",
-    "optgroup": "Potential"
-}

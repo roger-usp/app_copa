@@ -1,7 +1,0 @@
-{
-    "region_geojson": "microrregioesBR.geojson",
-    "data_path": "cafe_micro_2022.csv",
-    "value_title": "Produção de Café",
-    "value_unit": "ton/ano",
-    "optgroup": "Culturas"
-}
