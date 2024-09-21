@@ -1,5 +1,5 @@
 {
-	"region_geojson": "microrregioesBR.geojson",
+	"region_geojson": "municipiosBR.geojson",
 	"data_path": "casca_arroz_micro_23_24.csv",
 	"value_title": "Produção de Casca de arroz (safra 2023/2024)",
 	"value_unit": "ton/ano",
