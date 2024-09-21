@@ -1,0 +1,7 @@
+{
+    "region_geojson": "microrregioesBR.geojson",
+    "data_path": "girassol_micro_2022.csv",
+    "value_title": "Produção de Girassol (2022)",
+    "value_unit": "ton/ano",
+    "optgroup": "Culturas"
+}
