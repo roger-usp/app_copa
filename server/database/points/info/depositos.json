@@ -1,5 +1,5 @@
 {
     "data_path": "depositos.csv",
-    "legend": "Depósitos",
+    "legend": "Depósitos existentes",
     "color": "#00FF00"
 }
