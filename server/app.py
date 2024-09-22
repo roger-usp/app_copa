@@ -1,3 +1,6 @@
+import os
+import pandas as pd
+
 from flask import Flask, render_template, jsonify, request
 from .database.list_json import get_info_list
 from .database.polygon_geojson import make_poly_geojson
@@ -48,6 +51,51 @@ def point_geojson():
     info_file_name_list = [val + ".json" for val in values]
     point_geojson = make_point_geojson(info_file_name_list)
     return jsonify(point_geojson)
+
+@app.route("/vpl-demanda-rotas")
+def vpl_demanda_rotas():
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(script_dir)
+    file_path = os.path.join(parent_dir, "model_output.xlsx")
+
+    if not os.path.exists(file_path):
+        return jsonify({})       
+    else:
+        output_df = pd.read_excel(file_path)
+        vpl = output_df.loc[output_df["VPL"] > 0]
+        vpl = vpl["VPL"].tolist()[0]
+
+        demanda = output_df.loc[output_df["DEMANDA_TOTAL_ATENDIDA"] > 0]
+        demanda = demanda["DEMANDA_TOTAL_ATENDIDA"].tolist()[0]
+
+        rotas = []
+        storage_units = output_df[(output_df["INSTALAR_P_Z"] > 0.99) & (output_df["INSTALAR_P_Z"] < 1.01)]
+        for idx, row in storage_units.iterrows():
+            first_column_value  = eval(row.tolist()[0])
+            rota = first_column_value[1]
+            if rota not in rotas:
+                rotas.append(rota)
+        
+        print(rotas)
+        rotas_dict = {
+            "desidratacao": "Desidratação",
+            "hvo": "HVO",
+            "gaseificacao": "Gaseificação"
+        }
+
+        rotas = [rotas_dict[rota] if rota in rotas_dict.keys() else rota for rota in rotas]
+        rotas = ", ".join(rotas)
+
+        result = {
+            "Rotas utilizadas": rotas,
+            "Demanda atendida (ton)": "{:,.2f}".format(demanda),
+            "VPL (R$)": "{:,.2f}".format(vpl)
+        }
+        return jsonify(result)
+
+
+
+
 
 @app.route("/data-sources")
 def data_sources():

@@ -122,6 +122,33 @@
             )
             document.body.style.cursor = 'default';
         }
+
+        async function getVplDemandaRotas(scriptRoot) {
+            let route = "/vpl-demanda-rotas";
+            var url = scriptRoot + route;
+            let response = await fetch(url);
+            let responseJson = await response.json();
+            return responseJson;
+        }
+
+        async function addVplDemandaRotas(scriptRoot) {
+            let responseJson = await getVplDemandaRotas(scriptRoot);
+            let buttonsDiv = document.getElementById("buttons");
+
+            let vplDemandaRotasDiv = document.createElement("div");
+            vplDemandaRotasDiv.id = "vpl-demanda-rotas";
+
+
+            for (const [k, v] of Object.entries(responseJson)) {
+                let currentInnerHTML = vplDemandaRotasDiv.innerHTML;
+                let newInnerHTML = currentInnerHTML + `<p>${k}: ${v}</p>`
+                vplDemandaRotasDiv.innerHTML = newInnerHTML;
+            }
+
+            buttonsDiv.appendChild(vplDemandaRotasDiv);
+        }
+
+        addVplDemandaRotas(scriptRoot)
     </script>
 </body>
 </html>
