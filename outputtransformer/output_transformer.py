@@ -112,7 +112,7 @@ def get_colorless_points(output_df):
         data = points_df.loc[points_df["file_name"] == file_name]
         info = {
             "data_path": f"{file_name}.csv",
-            "legend": data["legend"][0],
+            "legend": data["legend"].tolist()[0],
             "color": ""
         }
         data = data[["lon", "lat", "Período Instalação", "Capacidade"]]
