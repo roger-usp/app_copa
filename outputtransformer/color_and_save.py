@@ -42,10 +42,14 @@ def color_info(colorless_dict):
     item_idx = 0
     for k, v in colorless_dict.items():
         data, info = v
-        try:
-            info["color"] = color_list[item_idx]
-        except IndexError:
-            info["color"] = get_random_hex_color()
+        
+        # if color was not explicitly attributed earlier
+        if info["color"] == "":
+            # then add a color from the list or a random color
+            try:
+                info["color"] = color_list[item_idx]
+            except IndexError:
+                info["color"] = get_random_hex_color()
 
         colored_dict[k] = [data, info]
         item_idx += 1

@@ -96,6 +96,20 @@ def add_point_coords(points_df_row, mun_coords_df):
     return points_df_row
 
 
+def get_point_color_from_unit_file_name(unit_file_name):
+    # Para unidades de produção o template é: f"P_units_{nome_tecnologia}"
+    # Unidades de armazenamento é sempre "S_units"
+    unit_file_name_dict = {
+        "S_units": "", # Sem cor definida
+        "P_units_desidratacao": "#FF8DA1" # Sem cor definida
+    }
+    if unit_file_name in unit_file_name_dict.keys():
+        return unit_file_name_dict[unit_file_name]
+    else:
+        return ""
+
+
+
 
 def get_colorless_points(output_df):
     mun_coords_df = get_mun_coords_df()
@@ -113,7 +127,7 @@ def get_colorless_points(output_df):
         info = {
             "data_path": f"{file_name}.csv",
             "legend": data["legend"].tolist()[0],
-            "color": ""
+            "color": get_point_color_from_unit_file_name(file_name)
         }
         data = data[["lon", "lat", "Período Instalação", "Capacidade"]]
         colorless_points[file_name] = [data, info]
@@ -167,6 +181,19 @@ def get_arrows_df(output_df):
 
 
 
+def get_arrow_color_from_product(product):
+    arrow_color_dict_from_prouct = {
+        "glicerina": "#0041C2", # Azul
+        "propano": "#d30000", # Vermelho 
+        "palma": "#OB6623" # Verde
+    }
+    if product in arrow_color_dict_from_prouct.keys():
+        return arrow_color_dict_from_prouct[product]
+    else:
+        return ""
+
+
+
 def get_colorless_arrows(output_df):
     arrows_df = get_arrows_df(output_df)
 
@@ -179,7 +206,7 @@ def get_colorless_arrows(output_df):
         info = {
             "data_path": f"{product}.csv",
             "legend": product.capitalize(),
-            "color": ""
+            "color": get_arrow_color_from_product(product)
         }
 
         colorless_arrows[product] = [data, info]
