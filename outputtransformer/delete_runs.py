@@ -1,13 +1,20 @@
 import os
 import json
 
+"""
+# Example
 POINTS_TO_KEEP = [
     "centros_operativos.json",
     "depositos.json",
     "capitais_brasileiras.json",
-    "portos.json"
+    "portos.json",
+    "localidades_glicerol.json",
+    "localidades_palma.json",
+    "localidades_soja.json",
+    "localidades_producao.json",
+    "localidades_mercado.json",
 ]
-
+"""
 
 def get_csv_to_keep(info_path, to_keep_list):
     # to_keep_list should be ARROWS_TO_KEEP or POINTS_TO_KEEP

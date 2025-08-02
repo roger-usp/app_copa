@@ -6,7 +6,19 @@ from outputtransformer.output_transformer import get_colorless_points, get_color
 from outputtransformer.color_and_save import color_info,save_colored_dict
 
 def load_output_data(output_df_path):
-    points_to_keep = ["centros_operativos.json","depositos.json","capitais_brasileiras.json","portos.json"]
+    points_to_keep = [
+        "centros_operativos.json",
+        "depositos.json",
+        "capitais_brasileiras.json",
+        "portos.json",
+        "localidades_glicerol.json",
+        "localidades_palma.json",
+        "localidades_soja.json",
+        "localidades_producao.json",
+        "localidades_mercado.json",
+    ]
+
+    
     delete_previous_runs(points_to_keep)
     output_df = pd.read_excel(output_df_path)
     colorless_points = get_colorless_points(output_df)
