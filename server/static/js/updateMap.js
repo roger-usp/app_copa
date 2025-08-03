@@ -56,7 +56,14 @@ function stylePolygonFeature(feature) {
 
 
 function styleLine(feature) {
-    return {color: feature.properties.color};
+    // Styles the arrows
+    return {
+        fillColor: feature.properties.color,
+        fillOpacity: 1,
+        color: "#000000", // border color
+        opacity: 1,
+        weight: 0.7,
+    };
 }
 
 
@@ -193,7 +200,7 @@ function updateMap(
 
     let map = initMap("map", centerCoords, zoomLevel);
     L.geoJson(polygonGeojson, {style: stylePolygonFeature, onEachFeature: polygonOnEachFeature}).addTo(map);
-    L.geoJson(lineGeojson, {style: styleLine}).addTo(map);
+    L.geoJson(lineGeojson, {style: styleLine}).addTo(map); // Means StyleArrows
     L.geoJson(pointGeojson, {pointToLayer: pointToLayer, onEachFeature: pointOnEachFeature}).addTo(map);
 
     fillPointArrowLegend(lineGeojson, pointGeojson);

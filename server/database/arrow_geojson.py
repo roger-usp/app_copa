@@ -29,21 +29,30 @@ def get_u(ABx, ABy, theta):
 
 
 def get_arrow_points(A,B, theta=0.1):
+    triangle_value = 0.5
     A,B = np.array(A), np.array(B)
     AB = B-A
-    C = A + (1-theta)*AB
+    AB_module = math.sqrt(AB[0]**2 + AB[1]**2)
+    C = B - (AB/AB_module)*triangle_value
     
     u0, u1 = get_u(AB[0], AB[1], theta)
     u0, u1 = np.array(u0), np.array(u1)
+    u0, u1 = (u0/(theta*AB_module))*triangle_value, (u1/(theta*AB_module))*triangle_value
     D = C+u0
     E = C+u1
     
-    arrow_points = [
+    F, G = A+0.3*u0, A+0.3*u1
+    H, I = C+0.3*u0, C+0.3*u1
+    arrow_points = [ # Multilinestring
         [A.tolist(), B.tolist()],
         [B.tolist(), D.tolist()],
         [B.tolist(), E.tolist()]
     ]
-    return arrow_points
+
+    polygon_points = [[F.tolist(), G.tolist(),I.tolist(), E.tolist(),
+    B.tolist(), D.tolist(), H.tolist(), F.tolist()]]
+
+    return polygon_points
 
 def get_info_dict(info_file_name):
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -61,16 +70,18 @@ def get_data_df(info_dict):
 
 
 def make_arrow_feature(coords, color, legend):
+    print("arrow_coords", coords) 
     return {
         "type": "Feature",
         "geometry": {
-            "type": "MultiLineString",
+            "type": "Polygon", # used to be "MultiLineString"
             "coordinates": coords
         },
         "properties": {
             "type": "arrow",
             "color": color,
             "legend": legend,
+            "opacity": 1,
             "other": ""
         }
     }
